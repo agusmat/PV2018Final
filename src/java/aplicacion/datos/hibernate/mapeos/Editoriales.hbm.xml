@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21/06/2018 23:30:40 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="aplicacion.datos.hibernate.mapeos.Editoriales" table="editoriales" catalog="biblioteca" optimistic-lock="version">
+        <id name="ediCodigo" type="java.lang.Integer">
+            <column name="edi_codigo" />
+            <generator class="identity" />
+        </id>
+        <property name="editNombre" type="string">
+            <column name="edit_nombre" length="100" not-null="true" />
+        </property>
+        <property name="editEstado" type="boolean">
+            <column name="edit_estado" not-null="true" />
+        </property>
+        <set name="publicacioneses" table="publicaciones" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="pub_editorial" not-null="true" />
+            </key>
+            <one-to-many class="aplicacion.datos.hibernate.mapeos.Publicaciones" />
+        </set>
+    </class>
+</hibernate-mapping>

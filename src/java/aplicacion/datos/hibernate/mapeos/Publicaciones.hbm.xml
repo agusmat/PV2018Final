@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21/06/2018 23:30:40 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="aplicacion.datos.hibernate.mapeos.Publicaciones" table="publicaciones" catalog="biblioteca" optimistic-lock="version">
+        <id name="pubCodigo" type="string">
+            <column name="pub_codigo" length="15" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="editoriales" class="aplicacion.datos.hibernate.mapeos.Editoriales" fetch="join">
+            <column name="pub_editorial" not-null="true" />
+        </many-to-one>
+        <property name="pubNombre" type="string">
+            <column name="pub_nombre" length="100" not-null="true" />
+        </property>
+        <property name="pubResumen" type="string">
+            <column name="pub_resumen" length="200" />
+        </property>
+        <property name="pubEstado" type="boolean">
+            <column name="pub_estado" not-null="true" />
+        </property>
+        <property name="pubTipo" type="string">
+            <column name="pub_tipo" length="15" not-null="true">
+                <comment>{REVISTA-LIBRO}</comment>
+            </column>
+        </property>
+        <property name="pubStock" type="int">
+            <column name="pub_stock" not-null="true" />
+        </property>
+        <set name="detallesReservases" table="detalles_reservas" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="drev_publicacion" length="15" not-null="true" />
+            </key>
+            <one-to-many class="aplicacion.datos.hibernate.mapeos.DetallesReservas" />
+        </set>
+        <set name="pubClas" table="pub_cla" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="pc_publicacion" length="15" not-null="true" />
+            </key>
+            <one-to-many class="aplicacion.datos.hibernate.mapeos.PubCla" />
+        </set>
+        <set name="detallesPrestamoses" table="detalles_prestamos" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="dp_publicacion" length="15" not-null="true" />
+            </key>
+            <one-to-many class="aplicacion.datos.hibernate.mapeos.DetallesPrestamos" />
+        </set>
+        <set name="pubAuts" table="pub_aut" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="pa_ublicacion" length="15" not-null="true" />
+            </key>
+            <one-to-many class="aplicacion.datos.hibernate.mapeos.PubAut" />
+        </set>
+    </class>
+</hibernate-mapping>

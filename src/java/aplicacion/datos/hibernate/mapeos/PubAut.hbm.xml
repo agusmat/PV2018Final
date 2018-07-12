@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21/06/2018 23:30:40 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="aplicacion.datos.hibernate.mapeos.PubAut" table="pub_aut" catalog="biblioteca" optimistic-lock="version">
+        <id name="paCodigo" type="java.lang.Integer">
+            <column name="pa_codigo" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="autores" class="aplicacion.datos.hibernate.mapeos.Autores" fetch="select">
+            <column name="pa_autor" not-null="true" />
+        </many-to-one>
+        <many-to-one name="publicaciones" class="aplicacion.datos.hibernate.mapeos.Publicaciones" fetch="select">
+            <column name="pa_ublicacion" length="15" not-null="true" />
+        </many-to-one>
+        <property name="paEstado" type="boolean">
+            <column name="pa_estado" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

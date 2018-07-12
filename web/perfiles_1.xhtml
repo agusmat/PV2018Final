@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./templates/newtemplate.xhtml">
+            <ui:define name="content">
+                <p:panel id="pnlPerfiles">
+                    <h:form id="frmPerfiles">
+                        <p:growl  id="jhk" showDetail="true"/>
+                        <p:panelGrid id="tblBotones" columns="2">
+                            <p:commandButton id="btnAgregarPerfil"
+                                             value="Agregar"
+                                             oncomplete="PF('agregarPerfil').show()"
+                                             update="tblMuestraPerfiles"/>
+                            <p:commandButton id="btnBuscarPerfil" value="Buscar"
+                                             oncomplete="PF('buscarPerfil').show()"
+                                             update="tblMuestraPerfiles"/>
+
+                        </p:panelGrid>
+
+                        <h:panelGrid id="tblMuestraPerfiles" columns="5">
+                            <p:dataTable id="dtTblPerfiles"
+                                         value="#{perfilManagedBean.perfilesEncontrados}"
+                                         var="cadaPerfil"
+                                         emptyMessage="No hay Perfiles en la Base de Datos">
+                                <p:column headerText="Codigo">
+                                    <p:outputLabel value="#{cadaPerfil.usuarios.usuCodigo}"/>
+                                </p:column>
+                                <p:column headerText="Usuario">
+                                    <p:outputLabel value="#{cadaPerfil.usuarios.usuNombreUsuario}"/>
+                                </p:column>
+                                <p:column headerText="Tipo Usuario">
+                                    <p:outputLabel value="#{cadaPerfil.usuarios.usuTipoUsuario}"/>
+                                </p:column>
+                                <p:column headerText="Nombre">
+                                    <p:outputLabel value="#{cadaPerfil.perNombres}"/>
+                                </p:column>
+                                <p:column headerText="Perfil">
+                                    <p:outputLabel value="#{cadaPerfil.perApellidos}"/>
+                                </p:column>
+                                <p:column headerText="Edición">
+                                    <p:commandButton icon="ui-icon-pencil"
+                                                     oncomplete="PF('modificarPerfil').show()"
+                                                     update=":frmModificarPerfil"
+                                                     actionListener="#{perfilManagedBean.establecerPerfil(cadaPerfil)}"/>
+                                    <p:commandButton icon="ui-icon-trash"
+                                                     oncomplete="PF('eliminarPerfil').show()"
+                                                     update=":frmEliminarPerfil"
+                                                     actionListener="#{perfilManagedBean.establecerPerfil(cadaPerfil)}"/>
+
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </h:form>     
+                </p:panel>
+
+                <p:dialog id="dlgAltaPerfil" widgetVar="agregarPerfil"
+                          header="Alta de Perfil" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <p:growl id="mensajesAltaPerfil" showDetail="false"
+                             showSummary="true"/>
+
+                    <h:form id="frmAltaPerfil">
+                        <p:panelGrid id="tblAltaPerfil" columns="2">
+                            <p:outputLabel value="Usuario: "/>
+                            <p:selectOneMenu value="#{perfilManagedBean.unUsuario}" converter="omnifaces.SelectItemsConverter">
+                                <f:selectItem itemLabel="Seleccion de Usuarios" itemValue="#{null}"/>
+                                <f:selectItems value="#{usuarioManagedBean.listaUsuario}" var="a" itemLabel="#{a.usuNombreUsuario}" itemValue="#{a}"/> 
+                            </p:selectOneMenu>
+                            <p:outputLabel for="txtTipo" value="Tipo:"/>
+                            <p:selectOneMenu id="txtTipo" value="#{perfilManagedBean.tipos}" required="true">
+                                <f:selectItem itemLabel="Seleccionar Tipo" itemValue=""/>
+                                <f:selectItem itemLabel="Final" itemValue="final"/>
+                                <f:selectItem itemLabel="Administrador" itemValue="administrador"/>
+                                <f:selectItem itemLabel="Supervisor" itemValue="supervisor"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel id="lblNombres" value="Nombres:"/>
+                            <p:inputText id="txtNombres" value="#{perfilManagedBean.nombres}"/>
+                            <p:outputLabel id="lblApellidos" value="Apellidos"/>
+                            <p:inputText id="txtApellidos" value="#{perfilManagedBean.apellidos}"/>
+                            <p:commandButton id="btnAgregarUsuario" value="Agregar"
+                                             actionListener="#{perfilManagedBean.agregarPerfil()}"
+                                             update=":frmPerfiles :mensajesAltaPerfil"
+                                             oncomplete="PF('agregarPerfil').hide()">
+                                <p:confirm header="Pedido de Confirmacion"
+                                           message="¿Confirma Agregar Perfil?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarAltaPerfil"
+                                             value="Salir"
+                                             oncomplete="PF('agregarPerfil').hide()"/>
+
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="dlgModificarPerfil"
+                          widgetVar="modificarPerfil"
+                          header="Modificacion de Perfil"
+                          resizable="false"
+                          showEffect="explode"
+                          hideEffect="explode" modal="true">
+                    <h:form id="frmModificarPerfil">
+                        <h:panelGrid id="pnlModificarPerfil" columns="2">
+                            <p:outputLabel for="usuario" value="Nombre Usuario: "/>
+                            <p:inputText   id="usuario" required="true"
+                                           value="#{perfilManagedBean.unPerfil.usuarios.usuNombreUsuario}"/>
+                            <p:outputLabel for="pass" value="Password: "/>
+                            <p:inputText   id="pass" required="true"
+                                           value="#{perfilManagedBean.unPerfil.usuarios.usuPassword}"/>
+                            <p:outputLabel for="nombre" value="Nombre: "/>
+                            <p:inputText   id="nombre" required="true"
+                                           value="#{perfilManagedBean.unPerfil.perNombres}"/>
+                            <p:outputLabel for="apellido" value="Apellido: "/>
+                            <p:inputText   id="apellido" required="true"
+                                           value="#{perfilManagedBean.unPerfil.perApellidos}"/>
+
+                            <p:outputLabel for="dni" value="DNI: "/>
+                            <p:inputText   id="dni" required="true"
+                                           value="#{perfilManagedBean.unPerfil.perDni}"/>
+                            <p:commandButton id="btnModificarPerfil" value="Modificar"
+                                             oncomplete="PF('modificarPerfil').hide()"
+                                             update=":frmPerfiles"
+                                             actionListener="#{perfilManagedBean.modificarPerfil}">
+                                <p:confirm header="Pedido de Confirmacion"
+                                           message="¿Confirma Modificar Perfil?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarModificarPerfil"
+                                             value="Salir"
+                                             oncomplete="PF('modificarPerfil').hide()"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="dlgEliminarPerfil" widgetVar="eliminarPerfil"
+                          header="Eliminacion de Perfil" resizable="false"
+                          modal="true">
+                    <h:form id="frmEliminarPerfil">
+                        <h:panelGrid id="pnlEliminarPerfil" columns="2">
+                            <p:outputLabel for="usuario" value="Usuario: "/>
+                            <p:outputLabel id="usuario"
+                                           value="#{perfilManagedBean.unPerfil.usuarios.usuNombreUsuario}"/>
+                            <p:outputLabel for="pass" value="Password: "/>
+                            <p:outputLabel id="pass" 
+                                           value="#{perfilManagedBean.unPerfil.usuarios.usuPassword}"/>
+                            <p:outputLabel for="nombre" value="Nombre: "/>
+                            <p:outputLabel id="nombre" 
+                                           value="#{perfilManagedBean.unPerfil.perNombres}"/>
+                            <p:outputLabel for="apellido" value="Apellido: "/>
+                            <p:outputLabel id="apellido" 
+                                           value="#{perfilManagedBean.unPerfil.perApellidos}"/>
+                            <p:outputLabel for="dni" value="DNI: "/>
+                            <p:outputLabel id="dni" 
+                                           value="#{perfilManagedBean.unPerfil.perDni}"/>
+                            <p:commandButton id="btnEliminarPerfil" value="Eliminar"
+                                             actionListener="#{perfilManagedBean.eliminarPerfil()}"
+                                             oncomplete="PF('eliminarPerfil').hide()"
+                                             update=":frmPerfiles">
+                                <p:confirm header="Pedido de Confirmacion"
+                                           message="¿Confirma Eliminar Perfil?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarEliminarPerfil"
+                                             value="Salir"
+                                             oncomplete="PF('eliminarPerfil').hide()"/>
+                        </h:panelGrid>
+
+                    </h:form>
+                </p:dialog>
+
+                <p:confirmDialog id='confirmacionDialogoPerfil'
+                                 global="true" showEffect="fade"
+                                 hideEffect="fade">
+                    <h:form id="frmConfirmacionOperacionPerfil">
+                        <p:commandButton value="SI" type="button"
+                                         styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="NO" type="button"
+                                         styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+                                         style="float: right"/>
+                    </h:form>
+                </p:confirmDialog>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

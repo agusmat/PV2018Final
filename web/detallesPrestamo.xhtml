@@ -1,0 +1,221 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+         <ui:composition template="./templates/newtemplate.xhtml">
+            <ui:define name="content">
+                <p:panel id="pnlDetallePrest">
+                    <h:form id="frmDetallePrest">
+                        <p:panelGrid id="tblBotones" columns="2">
+                            <p:commandButton id="btnDetallePrest"
+                                             value="Agregar"
+                                             oncomplete="PF('agregarDetallePrest').show()"
+                                             update="tblMuestraDetallePrest"/>
+                            <p:commandButton id="btnBuscarDetallePrest" value="Buscar"
+                                             oncomplete="PF('buscarDetallePrest').show()"
+                                             update="tblMuestraDetallePrest"/>
+
+                        </p:panelGrid>
+
+                        <h:panelGrid id="tblMuestraDetallePrest" columns="8">
+                            <p:dataTable id="dtTblDetallePrest"
+                                         value="#{detallesPrestamoManagedBean.detallesPrestamosEncontrados}"
+                                         var="cadaDetallePrest"
+                                         emptyMessage="No hay Detalles de Prestamos en la Base de Datos">
+                                <p:column headerText="Codigo">
+                                    <p:outputLabel value="#{cadaDetallePrest.dpCodigo}"/>
+                                </p:column>
+                                <p:column headerText="Turno">
+                                    <p:outputLabel value="#{cadaDetallePrest.dpTurno}"/>
+                                </p:column>
+                                <p:column headerText="Estado">
+                                    <p:outputLabel value="#{cadaDetallePrest.dpEstado}"/>
+                                </p:column>
+                                <p:column headerText="Prestamos">
+                                    <p:outputLabel value="#{cadaDetallePrest.prestamos}"/>
+                                </p:column>
+                                <p:column headerText="Publicaciones">
+                                    <p:outputLabel value="#{cadaDetallePrest.publicaciones}"/>
+                                </p:column>
+                                <p:column headerText="Fecha a Devolver">
+                                    <p:outputLabel value="#{cadaDetallePrest.dpFechaADevolver}"/>
+                                </p:column>
+                                <p:column headerText="Fecha de Devolucion">
+                                    <p:outputLabel value="#{cadaDetallePrest.dpFechaDevolucion}"/>
+                                </p:column>
+                                <p:column headerText="Edición">
+                                    <p:commandButton icon="ui-icon-pencil"
+                                                     oncomplete="PF('modificarDetallePrest').show()"
+                                                     update=":frmModificarDetallePrest"
+                                                     actionListener="#{detallesPrestamoManagedBean.establecerDetallesPrestamo(cadaDetallePrest)}"/>
+                                    <p:commandButton icon="ui-icon-trash"
+                                                     oncomplete="PF('eliminarDetallePrest').show()"
+                                                     update=":frmEliminarDetallePrest"
+                                                     actionListener="#{detallesPrestamoManagedBean.establecerDetallesPrestamo(cadaDetallePrest)}"/>
+
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </h:form>     
+                </p:panel>
+
+                <p:dialog id="dlgAltaDetallePrest" widgetVar="agregarDetallePrest"
+                          header="Alta de DetallePrest" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <p:growl id="mensajesAltaDetallePrest" showDetail="false"
+                             showSummary="true"/>
+
+                    <h:form id="frmAltaDetallePrest">
+                        <p:panelGrid id="tblAltaDetallePrest" columns="2">
+                            <p:outputLabel for="txtCodigo" value="Codigo:"/>
+                            <p:inputText id="txtCodigo"
+                                         value="#{detallesPrestamoManagedBean.dpCodigo}" required="true"/>
+                            <p:outputLabel for="txtEstado" value="Estado: "/>
+                            <p:inputText id="txtEstado"
+                                         value="#{detallesPrestamoManagedBean.dpEstado}" required="true"/>
+                            <p:outputLabel for="txtTurno" value="Turno:"/>
+                            <p:inputText id="txtTurno" 
+                                         value="#{detallesPrestamoManagedBean.dpTurno}"/>
+                            <p:outputLabel id="txtFechaaDev" value="Fecha a devolver"/>
+                            <p:inputText id="txtFechaaDev" 
+                                         value="#{detallesPrestamoManagedBean.dpFechaADevolver}"/>
+                            <p:outputLabel id="txtFechaDev" 
+                                           value="Fecha a Devolver:"/>
+                            <p:inputText id="txtFechaDev" 
+                                         value="#{detallesPrestamoManagedBean.dpFechaDevolucion}"/>
+                            <p:outputLabel id="txtPrestamos" 
+                                           value="Prestamos:"/>
+                            <p:inputText id="txtPrestamos" 
+                                         value="#{detallesPrestamoManagedBean.prestamos}"/>
+                            <p:outputLabel id="txtPublicaciones" 
+                                           value="Publicaciones:"/>
+                            <p:inputText id="txtPublicaciones" 
+                                         value="#{detallesPrestamoManagedBean.publicaciones}"/>
+                            <p:commandButton id="btnAgregarDetallePrest" value="Agregar"
+                                             actionListener="#{detallesPrestamoManagedBean.agregarDetallesPrestamo()}"
+                                             update=":frmDetallePrest :mensajesAltaDetallePrest"
+                                             oncomplete="PF('agregarDetallePrest').hide()">
+                                <p:confirm header="Pedido de Confirmacion"
+                                           message="¿Confirma Agregar Detalle de Prestamo?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarAltaDetallePrest"
+                                             value="Salir"
+                                             oncomplete="PF('agregarDetallePrest').hide()"/>
+
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="dlgModificarDetallePrest"
+                          widgetVar="modificarDetallePrest"
+                          header="Modificacion de DetallePrest"
+                          resizable="false"
+                          showEffect="explode"
+                          hideEffect="explode" modal="true">
+                    <h:form id="frmModificarDetallePrest">
+                        <h:panelGrid id="pnlModificarDetallePrest" columns="2">
+                            <p:outputLabel for="codigo" value="Codigo: "/>
+                            <p:inputText   id="codigo" required="true"
+                                           value="#{detallesPrestamoManagedBean.dpCodigo}"/>
+                            <p:outputLabel for="estado" value="Estado: "/>
+                            <p:inputText   id="estado" required="true"
+                                           value="#{detallesPrestamoManagedBean.dpEstado}"/>
+                            <p:outputLabel for="turno" value="Turno: "/>
+                            <p:inputText   id="turno" required="true"
+                                           value="#{detallesPrestamoManagedBean.dpTurno}"/>
+                            <p:outputLabel for="prestamos" value="Prestamos: "/>
+                            <p:inputText   id="prestamos" required="true"
+                                           value="#{detallesPrestamoManagedBean.prestamos}"/>
+                            <p:outputLabel for="pub" value="Publicaciones: "/>
+                            <p:inputText   id="pub" required="true"
+                                           value="#{detallesPrestamoManagedBean.publicaciones}"/>
+                            <p:outputLabel for="fad" value="Fecha a devolver: "/>
+                            <p:inputText   id="fad" required="true"
+                                           value="#{detallesPrestamoManagedBean.dpFechaADevolver}"/>
+                            <p:outputLabel for="fd" value="Fecha Devolucion: "/>
+                            <p:inputText   id="fd" required="true"
+                                           value="#{detallesPrestamoManagedBean.dpFechaDevolucion}"/>
+                            <p:commandButton id="btnModificarDetallePrest" value="Modificar"
+                                             oncomplete="PF('modificarDetallePrest').hide()"
+                                             update=":frmDetallePrest"
+                                             actionListener="#{detallesPrestamoManagedBean.mostrarxd}">
+                                <p:confirm header="Pedido de Confirmacion"
+                                           message="¿Confirma Modificar Detalle de Prestamo?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarModificarDetallePrest"
+                                             value="Salir"
+                                             oncomplete="PF('modificarDetallePrest').hide()"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="dlgEliminarDetallePrest" widgetVar="eliminarDetallePrest"
+                          header="Eliminacion de Detalle de Prestamo" resizable="false"
+                          modal="true">
+                    <h:form id="frmEliminarDetallePrest">
+                        <h:panelGrid id="pnlEliminarDetallePrest" columns="2">
+                          <p:outputLabel for="codigo" value="Codigo: "/>
+                            <p:inputText   id="codigo" required="true"
+                                           value="#{detallesPrestamoManagedBean.dpCodigo}"/>
+                            <p:outputLabel for="turno" value="Turno: "/>
+                            <p:inputText   id="turno" required="true"
+                                           value="#{detallesPrestamoManagedBean.dpTurno}"/>
+                            <p:outputLabel for="estado" value="Estado: "/>
+                            <p:inputText   id="estado" required="true"
+                                           value="#{detallesPrestamoManagedBean.dpEstado}"/>
+                            <p:outputLabel for="prestamos" value="Prestamos: "/>
+                            <p:inputText   id="prestamos" required="true"
+                                           value="#{detallesPrestamoManagedBean.prestamos}"/>
+                            <p:outputLabel for="publicaciones" value="Publicaciones: "/>
+                            <p:inputText   id="publicaciones" required="true"
+                                           value="#{detallesPrestamoManagedBean.publicaciones}"/>
+                            <p:outputLabel for="fechaaDe" value="Fecha a Devolver: "/>
+                            <p:inputText   id="fechaaDe" required="true"
+                                           value="#{detallesPrestamoManagedBean.dpFechaADevolver}"/>
+                            <p:outputLabel for="fechaDev" value="Fecha Devolucion: "/>
+                            <p:inputText   id="fechaDev" required="true"
+                                           value="#{detallesPrestamoManagedBean.dpFechaDevolucion}"/>
+                            <p:commandButton id="btnEliminarPublicacion" value="Eliminar"
+                                             actionListener="#{detallesPrestamoManagedBean.eliminarDetallesPrestamos()}"
+                                             oncomplete="PF('eliminarDetallePrest').hide()"
+                                             update=":frmDetallePrest">
+                                <p:confirm header="Pedido de Confirmacion"
+                                           message="¿Confirma Eliminar Detalle de Prestamo?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarEliminarDetallePrest"
+                                             value="Salir"
+                                             oncomplete="PF('eliminarDetallePrest').hide()"/>
+                        </h:panelGrid>
+
+                    </h:form>
+                </p:dialog>
+
+                <p:confirmDialog id='confirmacionDialogoDetallePrest'
+                                 global="true" showEffect="fade"
+                                 hideEffect="fade">
+                    <h:form id="frmConfirmacionOperacionDetallePrest">
+                        <p:commandButton value="SI" type="button"
+                                         styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="NO" type="button"
+                                         styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+                                         style="float: right"/>
+                    </h:form>
+                </p:confirmDialog>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

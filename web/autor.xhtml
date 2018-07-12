@@ -1,0 +1,155 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./templates/newtemplate.xhtml">
+            <ui:define name="content">
+                <p:panel id="pnlEditoriales" >
+                    <h:form id="frmEditoriales">
+                        <p:panelGrid id="tblBotones" columns="2">
+                            <p:commandButton id="btnAgregarEditorial"
+                                             value="Agregar"
+                                             oncomplete="PF('agregarEdit').show()"
+                                             update="tblMuestraEditoriales"/>
+                            <p:commandButton id="btnBuscarEditorial" 
+                                             value="Buscar"
+                                             oncomplete="PF('buscarEditorial').show()"
+                                             update="tblMuestraEditoriales"/>
+                        </p:panelGrid>
+                        <h:panelGrid id="tblMuestraEditoriales" columns="5">
+                            <p:dataTable id="dtTbl"
+                                         value="#{autorManagedBean.autoresEncontrados}"
+                                         var="cadaEdit"
+                                         emptyMessage="No hay Editoriales en la Base de Datos">
+                                <p:column headerText="Estado">
+                                    <p:outputLabel value="#{cadaEdit.autCodigo}"/>
+                                </p:column>
+                                <p:column headerText="Codigo">
+                                    <p:outputLabel value="#{cadaEdit.autNombres}"/>
+                                </p:column>
+                                <p:column headerText="Nombre">
+                                    <p:outputLabel value="#{cadaEdit.autApellidos}"/>
+                                </p:column>
+                                <p:column headerText="Edición">
+                                    <p:commandButton icon="ui-icon-pencil"
+                                                     oncomplete="PF('modificarEditorial').show()"
+                                                     update=":frmModificarEditorial"
+                                                     actionListener="#{autorManagedBean.establecerAutor(cadaEdit)}"/>
+                                    <p:commandButton icon="ui-icon-trash"
+                                                     oncomplete="PF('eliminarEditorial').show()"
+                                                     update=":frmEliminarEditorial"
+                                                     actionListener="#{autorManagedBean.establecerAutor(cadaEdit)}"/>
+
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </h:form>     
+                </p:panel>
+
+                <p:dialog id="dlgAltaEdit" widgetVar="agregarEdit"
+                          header="Alta de Editorial" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <p:growl id="mensajesAltaEditorial" showDetail="true"
+                             showSummary="true"/>
+                    <h:form id="frmAltaEditorial">
+                        <p:panelGrid id="tblAltaEditorial" columns="2">
+                            <p:outputLabel for="txtNombreEdit" value="Nombre:"/>
+                            <p:inputText id="txtNombreEdit" value="#{autorManagedBean.autNombres}" required="true"/>
+                            <p:outputLabel for="txtApellido" value="Apellido:"/>
+                            <p:inputText id="txtApellido" value="#{autorManagedBean.autApellidos}" required="true"/>
+                            <p:commandButton id="btnAgregarUsuario" value="Agregar"
+                                             actionListener="#{autorManagedBean.agregarAutor()}"
+                                             update=":frmEditoriales :mensajesAltaEditorial"
+                                             oncomplete="PF('agregarEdit').hide()">
+                                <p:confirm header="Pedido de Confirmacion"
+                                           message="¿Confirma Agregar Editorial?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarAltaPerfil"
+                                             value="Salir"
+                                             oncomplete="PF('agregarEdit').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="dlgModificarEditorial"
+                          widgetVar="modificarEditorial"
+                          header="Modificacion de Editorial"
+                          resizable="false"
+                          showEffect="explode"
+                          hideEffect="explode" modal="true">
+                    <h:form id="frmModificarEditorial">
+                        <h:panelGrid id="pnlModificarEditorial" columns="2">
+                            <p:outputLabel for="nombre" value="Nombre: "/>
+                            <p:inputText   id="nombre" required="true"
+                                           value="#{autorManagedBean.autNombres}"/>
+                            <p:outputLabel for="apellido" value="Apellido: "/>
+                            <p:inputText   id="apellido" required="true"
+                                           value="#{autorManagedBean.autApellidos}"/>
+                            <p:commandButton id="btnModificarPerfil" value="Modificar"
+                                             oncomplete="PF('modificarEditorial').hide()"
+                                             update=":frmEditoriales" actionListener="#{autorManagedBean.modificarEditorial()}">
+                                <p:confirm header="Pedido de Confirmacion"
+                                           message="¿Confirma Modificar Editorial?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarModificarEditorial"
+                                             value="Salir"
+                                             oncomplete="PF('modificarEditorial').hide()"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="dlgEliminarEditorial" widgetVar="eliminarEditorial"
+                          header="Eliminacion de Editorial" resizable="false"
+                          modal="true">
+                    <h:form id="frmEliminarEditorial">
+                        <h:panelGrid id="pnlEliminarEditorial" columns="2">
+                            <p:outputLabel for="nombre" value="Nombre: "/>
+                            <p:outputLabel id="nombre"
+                                           value="#{autorManagedBean.unAutor.autNombres}"/>
+                            <p:outputLabel for="codigo" value="Apellido: "/>
+                            <p:outputLabel id="codigo" 
+                                           value="#{autorManagedBean.unAutor.autApellidos}"/>
+                            <p:commandButton id="btnEliminarEditorial" value="Eliminar"
+                                             actionListener="#{autorManagedBean.eliminarEditorial()}"
+                                             oncomplete="PF('eliminarEditorial').hide()"
+                                             update=":frmEditoriales">
+                                <p:confirm header="Pedido de Confirmacion"
+                                           message="¿Confirma Eliminar Editorial?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarEliminarEditorial"
+                                             value="Salir"
+                                             oncomplete="PF('eliminarEditorial').hide()"/>
+                        </h:panelGrid>
+
+                    </h:form>
+                </p:dialog>
+
+                <p:confirmDialog id='confirmacionDialogoEditorial'
+                                 global="true" showEffect="fade"
+                                 hideEffect="fade">
+                    <h:form id="frmConfirmacionOperacionEditorial">
+                        <p:commandButton value="SI" type="button"
+                                         styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="NO" type="button"
+                                         styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+                                         style="float: right"/>
+                    </h:form>
+                </p:confirmDialog>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

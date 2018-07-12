@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./templates/newtemplate.xhtml">
+            <ui:define name="content">
+                <p:panel id="pnlEditoriales" >
+                    <h:form id="frmEditoriales">
+                        <h:panelGrid id="tblMuestraEditoriales" columns="5">
+                            <p:dataTable id="dtTbl"
+                                         value="#{reservaLibroManagedBean.listaPublicaciones}" filteredValue="#{reservaLibroManagedBean.publicacionesFiltradas}"
+                                         var="cadaEdit"
+                                         emptyMessage="No hay publicaciones en la Base de Datos">
+                                <p:column headerText="Codigo">
+                                    <p:outputLabel value="#{cadaEdit.pubCodigo}"/>
+                                </p:column>
+                                <p:column headerText="Nombre" filterBy="#{cadaEdit.pubNombre}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{cadaEdit.pubNombre}"/>
+                                </p:column>
+                                <p:column headerText="Editorial">
+                                    <p:outputLabel value="#{cadaEdit.editoriales.editNombre}"/>
+                                </p:column>
+                                <p:column headerText="Stock">
+                                    <p:outputLabel value="#{cadaEdit.pubStock}"/>
+                                </p:column>
+                                <p:column headerText="Disponibilidad">
+                                    <p:outputLabel value="#{cadaEdit.pubEstado}"/>
+                                </p:column>
+                                <p:column headerText="Reserva">
+                                    <p:commandButton icon="ui-icon-pencil"
+                                                     oncomplete="PF('modificarEditorial').show()"
+                                                     update=":frmModificarEditorial"
+                                                     actionListener="#{reservaLibroManagedBean.establecerPublicacion(cadaEdit)}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </h:form>     
+                </p:panel>
+                <p:dialog id="dlgModificarEditorial"
+                          widgetVar="modificarEditorial"
+                          header="Modificacion de Editorial"
+                          resizable="false"
+                          showEffect="explode"
+                          hideEffect="explode" modal="true">
+                    <h:form id="frmModificarEditorial">
+                        <p:growl showDetail="true" showSummary="true" id="mensajesReservaLibro"/>
+                        <h:panelGrid id="pnlModificarEditorial" columns="2">
+                            <p:outputLabel for="nombre" value="Nombre: "/>
+                            <p:outputLabel   id="nombre"
+                                             value="#{reservaLibroManagedBean.unaPublicacion.pubNombre}"/>
+                            <p:outputLabel for="apellido" value="Editorial: "/>
+                            <p:outputLabel id="apellido"
+                                           value="#{reservaLibroManagedBean.unaPublicacion.editoriales.editNombre}"/>
+                            <p:calendar id="fechaReserva" value="#{reservaLibroManagedBean.fecha}" required="true" mindate="today"/>
+                            <p:commandButton id="btnModificarPerfil" value="Reservar"
+                                             oncomplete="PF('modificarEditorial').hide()"
+                                             update=":frmEditoriales" actionListener="#{reservaLibroManagedBean.confirmarReserva()}">
+                                <p:confirm header="Pedido de Confirmacion"
+                                           message="¿Confirma Reserva?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarModificarEditorial"
+                                             value="Salir"
+                                             oncomplete="PF('modificarEditorial').hide()"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+
+                <p:confirmDialog id='confirmacionDialogoEditorial'
+                                 global="true" showEffect="fade"
+                                 hideEffect="fade">
+                    <h:form id="frmConfirmacionOperacionEditorial">
+                        <p:commandButton value="SI" type="button"
+                                         styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="NO" type="button"
+                                         styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+                                         style="float: right"/>
+                    </h:form>
+                </p:confirmDialog>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

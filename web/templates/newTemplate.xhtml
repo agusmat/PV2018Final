@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <title>Facelets Template</title>
+    </h:head>
+
+    <h:body>
+
+        <div id="top">
+            <ui:insert name="top">
+                <p:panel id="pnlMenú" rendered="#{usuarioManagedBean.verificarSesion() eq 1}">
+                    <h:form id="frmMenu">
+                        <p:growl id="mensajes"/>
+                        <p:menubar id="mnOpciones">
+                            <p:submenu label="Reservas">
+                                <p:menuitem value="Reservar" outcome="reservaLibro"/>
+                            </p:submenu>
+               
+                            <f:facet name="options">
+                                <p:outputLabel value="Bienvenido"/>
+                                <p:commandButton action="#{usuarioManagedBean.cerrarSesion()}" update="@form" value="Cerrar Sesion"/>
+                            </f:facet>
+                        </p:menubar>
+                    </h:form>
+                </p:panel>
+                <p:panel id="pnlMenúAdministrador" rendered="#{usuarioManagedBean.verificarSesion() eq 2}">
+                    <h:form id="frmMenuAdministrador">
+                        <p:growl id="mensajesAdministrador"/>
+                        <p:menubar id="mnOpcionesAdministrador">
+                            <p:submenu label="Operaciones">
+                                <p:menuitem value="Perfiles" outcome="perfiles_1"/>
+                                <p:menuitem value="Editoriales" outcome="editoriales"/>
+                                <p:menuitem value="Autor" outcome="autor"/>
+                                <p:menuitem value="Publicaciones" outcome="publicaciones"/>
+                                <p:menuitem value="Clasificaciones" outcome="clasificaciones"/>
+                                <p:menuitem value="Prestamo" outcome="prestamoLibros"/>
+                            </p:submenu>
+               
+                            <f:facet name="options">
+                                <p:outputLabel value="Bienvenido"/>
+                                <p:commandButton action="#{usuarioManagedBean.cerrarSesion()}" update="@form" value="Cerrar Sesion"/>
+                            </f:facet>
+                        </p:menubar>
+                    </h:form>
+                </p:panel>
+                <p:panel id="pnlMenúSupervisor" rendered="#{usuarioManagedBean.verificarSesion() eq 3}">
+                    <h:form id="frmMenuSupervisor">
+                        <p:growl id="mensajesSupervisor"/>
+                        <p:menubar id="mnOpcionesSupervisor">
+                            <p:submenu label="Operaciones">
+                                <p:menuitem value="Perfiles" outcome="perfiles_1"/>
+                                <p:menuitem value="Editoriales" outcome="editoriales"/>
+                                <p:menuitem value="Autor" outcome="autor"/>
+                                <p:menuitem value="Publicaciones" outcome="publicaciones"/>
+                                <p:menuitem value="Clasificaciones" outcome="clasificaciones"/>
+                                <p:menuitem value="Prestamo" outcome="prestamoLibros"/>
+                            </p:submenu>
+               
+                            <f:facet name="options">
+                                <p:outputLabel value="Bienvenido"/>
+                                <p:commandButton action="#{usuarioManagedBean.cerrarSesion()}" update="@form" value="Cerrar Sesion"/>
+                            </f:facet>
+                        </p:menubar>
+                    </h:form>
+                </p:panel>
+            </ui:insert>
+        </div>
+
+        <div id="content" >
+            <ui:insert name="content">
+
+            </ui:insert>
+
+        </div>
+
+        <div id="bottom">
+            <ui:insert name="bottom"></ui:insert>
+        </div>
+
+    </h:body>
+
+</html>

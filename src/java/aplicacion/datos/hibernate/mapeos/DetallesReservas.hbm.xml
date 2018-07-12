@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21/06/2018 23:30:40 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="aplicacion.datos.hibernate.mapeos.DetallesReservas" table="detalles_reservas" catalog="biblioteca" optimistic-lock="version">
+        <id name="drevCodigo" type="java.lang.Integer">
+            <column name="drev_codigo" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="publicaciones" class="aplicacion.datos.hibernate.mapeos.Publicaciones" fetch="join">
+            <column name="drev_publicacion" length="15" not-null="true" />
+        </many-to-one>
+        <many-to-one name="reservas" class="aplicacion.datos.hibernate.mapeos.Reservas" fetch="join" cascade="all">
+            <column name="drev_reserva" not-null="true" />
+        </many-to-one>
+        <property name="drevCantidad" type="int">
+            <column name="drev_cantidad" not-null="true" />
+        </property>
+        <property name="drevEstado" type="boolean">
+            <column name="drev_estado" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

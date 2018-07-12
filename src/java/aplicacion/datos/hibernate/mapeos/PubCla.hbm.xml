@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21/06/2018 23:30:40 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="aplicacion.datos.hibernate.mapeos.PubCla" table="pub_cla" catalog="biblioteca" optimistic-lock="version">
+        <id name="pcCodigo" type="java.lang.Integer">
+            <column name="pc_codigo" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="clasificaciones" class="aplicacion.datos.hibernate.mapeos.Clasificaciones" fetch="join">
+            <column name="pc_clasificacion" not-null="true" />
+        </many-to-one>
+        <many-to-one name="publicaciones" class="aplicacion.datos.hibernate.mapeos.Publicaciones" fetch="select">
+            <column name="pc_publicacion" length="15" not-null="true" />
+        </many-to-one>
+        <property name="pcEstado" type="boolean">
+            <column name="pc_estado" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21/06/2018 23:30:40 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="aplicacion.datos.hibernate.mapeos.Perfiles" table="perfiles" catalog="biblioteca" optimistic-lock="version">
+        <id name="perCodigo" type="java.lang.Integer">
+            <column name="per_codigo" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="usuarios" class="aplicacion.datos.hibernate.mapeos.Usuarios" fetch="join">
+            <column name="per_usuario" not-null="true" />
+        </many-to-one>
+        <property name="perApellidos" type="string">
+            <column name="per_apellidos" length="50" not-null="true" />
+        </property>
+        <property name="perNombres" type="string">
+            <column name="per_nombres" length="50" not-null="true" />
+        </property>
+        <property name="perDni" type="string">
+            <column name="per_dni" length="8" not-null="true" />
+        </property>
+        <property name="perFechaNac" type="date">
+            <column name="per_fecha_nac" length="10" not-null="true" />
+        </property>
+        <property name="perEmail" type="string">
+            <column name="per_email" length="80" not-null="true" />
+        </property>
+        <property name="perDireccion" type="string">
+            <column name="per_direccion" length="100" not-null="true" />
+        </property>
+        <property name="perTelefono" type="string">
+            <column name="per_telefono" length="12" not-null="true" />
+        </property>
+        <property name="perEstado" type="boolean">
+            <column name="per_estado" length="12" not-null="true" />
+        </property>
+        
+    </class>
+</hibernate-mapping>

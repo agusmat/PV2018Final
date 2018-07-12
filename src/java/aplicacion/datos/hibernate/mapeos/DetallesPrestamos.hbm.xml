@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21/06/2018 23:30:40 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="aplicacion.datos.hibernate.mapeos.DetallesPrestamos" table="detalles_prestamos" catalog="biblioteca" optimistic-lock="version">
+        <id name="dpCodigo" type="java.lang.Integer">
+            <column name="dp_codigo" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="prestamos" class="aplicacion.datos.hibernate.mapeos.Prestamos" fetch="join" cascade="all">
+            <column name="dp_prestamo" not-null="true" />
+        </many-to-one>
+        <many-to-one name="publicaciones" class="aplicacion.datos.hibernate.mapeos.Publicaciones" fetch="join">
+            <column name="dp_publicacion" length="15" not-null="true" />
+        </many-to-one>
+        <property name="dpEstado" type="boolean">
+            <column name="dp_estado" not-null="true" />
+        </property>
+        <property name="dpFechaADevolver" type="date">
+            <column name="dp_fecha_a_devolver" length="10" not-null="true" />
+        </property>
+        <property name="dpTurno" type="string">
+            <column name="dp_turno" length="45" not-null="true">
+                <comment>indica si se devuelve a la ma&#241;ana o a la tarde {MA&#209;ANA-TARDE}</comment>
+            </column>
+        </property>
+        <property name="dpFechaDevolucion" type="date">
+            <column name="dp_fecha_devolucion" length="10" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

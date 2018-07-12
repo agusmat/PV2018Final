@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./templates/newTemplate.xhtml">
+            <ui:define name="content">
+                <p:panel id="pnlUsuarios">
+                    <h:form id="frmUsuarios">
+                        <p:growl  id="jhk" showDetail="true"/>
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="Ingrese Nombre Usuario"/>
+                            <p:inputText value="#{usuarioManagedBean.username}" required="true"/>
+                            <p:outputLabel value="Ingrese contraseña"/>
+                            <p:password value="#{usuarioManagedBean.contraseña}" required="true"/>
+                            <p:commandButton update="@form" action="/login" value="Volver al login"/>
+                            <p:commandButton id="Agregar" value="Agregar" action="#{usuarioManagedBean.crearUsuarioFinal()}" update=":frmTablaUsuarios"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:panel>
+                <h:form id="frmTablaUsuarios">
+                    <p:dataTable value="#{usuarioManagedBean.listaUsuario}" emptyMessage="No hay usuarios cargados" var="cadUsuario">
+                        <p:panelGrid columns="3">
+                            <p:column headerText="Usuario">
+                                <p:outputLabel id="lblUsu" value="#{cadUsuario.usuNombreUsuario}"/>
+                            </p:column>
+                            <p:column headerText="Contraseña">
+                                <p:outputLabel id="lblCod" value="#{cadUsuario.usuPassword}"/>
+                            </p:column>
+                            <p:column headerText="Tipo_Usuario">
+                                <p:outputLabel id="lblTipUs" value="#{cadUsuario.usuTipoUsuario}"/>
+                            </p:column>
+                        </p:panelGrid>
+                    </p:dataTable>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

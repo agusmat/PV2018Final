@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21/06/2018 23:30:40 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="aplicacion.datos.hibernate.mapeos.Prestamos" table="prestamos" catalog="biblioteca" optimistic-lock="version">
+        <id name="preCodigo" type="java.lang.Integer">
+            <column name="pre_codigo" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="perfiles" class="aplicacion.datos.hibernate.mapeos.Perfiles" fetch="join">
+            <column name="pre_socio" not-null="true" />
+        </many-to-one>
+        <property name="preFechaPrestamo" type="date">
+            <column name="pre_fecha_prestamo" length="10" not-null="true" />
+        </property>
+        <property name="preEstado" type="boolean">
+            <column name="pre_estado" not-null="true" />
+        </property>
+        <property name="preAdministrativo" type="string">
+            <column name="pre_administrativo" length="10" not-null="true" />
+        </property>
+        <set name="detallesPrestamoses" table="detalles_prestamos" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="dp_prestamo" not-null="true" />
+            </key>
+            <one-to-many class="aplicacion.datos.hibernate.mapeos.DetallesPrestamos" />
+        </set>
+    </class>
+</hibernate-mapping>

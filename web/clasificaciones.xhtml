@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+         <ui:composition template="./templates/newtemplate.xhtml">
+            <ui:define name="content">
+                <p:panel id="pnlClasificacion">
+                    <h:form id="frmClasificacion">
+                        <p:panelGrid id="tblBotones" columns="2">
+                            <p:commandButton id="btnAgregarClasificacion"
+                                             value="Agregar"
+                                             oncomplete="PF('agregarClasificacion').show()"
+                                             update="tblMuestraClasificacion"/>
+                            <p:commandButton id="btnBuscarClasificacion" value="Buscar"
+                                             oncomplete="PF('buscarClasificacion').show()"
+                                             update="tblMuestraClasificacion"/>
+
+                        </p:panelGrid>
+
+                        <h:panelGrid id="tblMuestraClasificacion" columns="4">
+                            <p:dataTable id="dtTblClasificacion"
+                                         value="#{clasificacionManagedBean.clasificacionesEncontradas}"
+                                         var="cadaClas"
+                                         emptyMessage="No hay Clasificaciones en la Base de Datos">
+                                <p:column headerText="Codigo">
+                                    <p:outputLabel value="#{cadaClas.claCodigo}"/>
+                                </p:column>
+                                <p:column headerText="Identificador">
+                                    <p:outputLabel value="#{cadaClas.claIdentificador}"/>
+                                </p:column>
+                                <p:column headerText="Descripcion">
+                                    <p:outputLabel value="#{cadaClas.claDescripcion}"/>
+                                </p:column>
+                                <p:column headerText="Edición">
+                                    <p:commandButton icon="ui-icon-pencil"
+                                                     oncomplete="PF('modificarClasificacion').show()"
+                                                     update=":frmModificarClasificacion"
+                                                     actionListener="#{clasificacionManagedBean.establecerClasificacion(cadaClas)}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </h:form>     
+                </p:panel>
+
+                <p:dialog id="dlgAltaClasificacion" widgetVar="agregarClasificacion"
+                          header="Alta de Clasificacion" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <p:growl id="mensajesAltaClasificacion" showDetail="false"
+                             showSummary="true"/>
+
+                    <h:form id="frmAltaClasificacion">
+                        <p:panelGrid id="tblAltaClasificacion" columns="2">
+                            
+                            <p:outputLabel for="txtIdentificador" value="Identificador: "/>
+                            <p:inputText id="txtIdentificador"
+                                         value="#{clasificacionManagedBean.claIdentificador}" required="true"/>
+                            <p:outputLabel for="txtDescripcion" value="Descripcion:"/>
+                            <p:inputText id="txtDescripcion" 
+                                         value="#{clasificacionManagedBean.claDescripcion}"/>
+                            <p:commandButton id="btnAgregarClasificacion" value="Agregar"
+                                             actionListener="#{clasificacionManagedBean.agregarClasificacion()}"
+                                             update=":frmClasificacion :mensajesAltaClasificacion"
+                                             oncomplete="PF('agregarClasificacion').hide()">
+                                <p:confirm header="Pedido de Confirmacion"
+                                           message="¿Confirma Agregar Clasificacion?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarAltaClasificacion"
+                                             value="Salir"
+                                             oncomplete="PF('agregarClasificacion').hide()"/>
+
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="dlgModificarClasificacion"
+                          widgetVar="modificarClasificacion"
+                          header="Modificacion de Clasificacion"
+                          resizable="false"
+                          showEffect="explode"
+                          hideEffect="explode" modal="true">
+                    <h:form id="frmModificarClasificacion">
+                        <h:panelGrid id="pnlModificarClasificacion" columns="2">
+                            <p:outputLabel for="identificador" value="Identificador: "/>
+                            <p:inputText   id="identificador" required="true"
+                                           value="#{clasificacionManagedBean.claIdentificador}"/>
+                            <p:outputLabel for="descripcion" value="Desripcion: "/>
+                            <p:inputText   id="descripcion" required="true"
+                                           value="#{clasificacionManagedBean.claDescripcion}"/>
+                            <p:commandButton id="btnModificarClasificacion" value="Modificar"
+                                             oncomplete="PF('modificarClasificacion').hide()"
+                                             update=":frmClasificacion"
+                                             actionListener="#{clasificacionManagedBean.modificarEditorial()}">
+                                <p:confirm header="Pedido de Confirmacion"
+                                           message="¿Confirma Modificar Clasificacion?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarModificarClasificacion"
+                                             value="Salir"
+                                             oncomplete="PF('modificarClasificacion').hide()"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+
+
+                <p:confirmDialog id='confirmacionDialogoClasificacion'
+                                 global="true" showEffect="fade"
+                                 hideEffect="fade">
+                    <h:form id="frmConfirmacionOperacionClasificacion">
+                        <p:commandButton value="SI" type="button"
+                                         styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="NO" type="button"
+                                         styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+                                         style="float: right"/>
+                    </h:form>
+                </p:confirmDialog>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+
